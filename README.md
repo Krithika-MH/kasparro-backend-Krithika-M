@@ -648,7 +648,6 @@ The workflow:
 
 **View Workflow Runs:** [GitHub Actions](https://github.com/Krithika-MH/kasparro-backend-Krithika-M/actions)
 
--
 ##  Troubleshooting
 
 ### Database Connection Issues
