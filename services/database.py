@@ -94,25 +94,35 @@ def test_connection():
 
 # ==================== RUN THIS TO TEST ====================
 
+# Add this at the very bottom of services/database.py
+
+# Add this at the END of services/database.py (after all class definitions)
+
 if __name__ == "__main__":
-    print("\n" + "="*60)
-    print("Testing Database Connection")
-    print("="*60 + "\n")
+    print("=" * 60)
+    print("🔧 INITIALIZING DATABASE TABLES")
+    print("=" * 60)
     
-    print("Database URL:", DATABASE_URL)
-    print()
-    
-    if test_connection():
-        print("\nInitializing database tables...")
-        init_db()
-        print("\n" + "="*60)
-        print("✅ Database setup complete!")
-        print("="*60 + "\n")
-    else:
-        print("\n" + "="*60)
-        print("❌ Database connection failed!")
-        print("="*60 + "\n")
-        print("Troubleshooting:")
-        print("1. Check Docker is running: docker ps")
-        print("2. Start database: docker-compose up -d postgres")
-        print("3. Check .env file has correct DATABASE_URL")
+    try:
+        # Create all tables
+        Base.metadata.create_all(bind=engine)
+        print("✅ Database tables created successfully!")
+        
+        # Verify tables were created
+        from sqlalchemy import inspect
+        inspector = inspect(engine)
+        tables = inspector.get_table_names()
+        
+        print(f"\n📋 Tables created ({len(tables)} total):")
+        for table in tables:
+            print(f"   ✓ {table}")
+        
+        print("\n" + "=" * 60)
+        print("✅ DATABASE INITIALIZATION COMPLETE")
+        print("=" * 60)
+        
+    except Exception as e:
+        print(f"\n❌ ERROR CREATING TABLES:")
+        print(f"   {str(e)}")
+        print("=" * 60)
+        raise
